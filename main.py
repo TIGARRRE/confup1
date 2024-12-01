@@ -90,7 +90,7 @@ def cmd_touch(touch_file):
             print(f"File '{touch_file}' created.")
 
 def cmd_exit():
-    return 0
+    exit()
 
 with ZipFile(vfs_path, 'a') as file:
     while True:
