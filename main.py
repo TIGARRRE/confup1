@@ -279,6 +279,40 @@ def cmd_test():
         
     with ZipFile(vfs_path, 'w') as file:
         pass
+    
+    #test mkdir
+    
+        print('cmd_mkdir: test 1')
+    cmd_mkdir("mkdir_test")
+    captured_output = StringIO()
+    sys.stdout = captured_output
+    cmd_ls()
+    sys.stdout = output
+    if "mkdir_test" in captured_output.getvalue().strip():
+        print("Test 1 for cmd_mkdir: success")
+        results.append("mkdir test 1 passed\n")
+    else:
+        print("Test 1 for cmd_mkdir: error")
+        results.append("mkdir test 1 not passed\n")
+    
+    print('cmd_mkdir: test 2')
+    cmd_ls()
+    captured_output = StringIO()
+    sys.stdout = captured_output
+    cmd_mkdir("mkdir_test")
+    sys.stdout = output
+    if captured_output.getvalue().strip() == "mkdir: cannot create directory 'mkdir_test': File exists" :
+        print("test 2 for cmd_mkdir: success")
+        results.append("mkdir test 2 passed\n")
+    else:
+        print("test 2 for cmd_mkdir: error")
+        print (captured_output.getvalue().strip())
+        results.append("mkdir test 2 not passed\n")
+        
+    with ZipFile(vfs_path, 'w') as file:
+        pass
+    
+    
     for each in results:
         print(each)
     
