@@ -2,8 +2,7 @@ import yaml
 import sys
 import os
 from zipfile import ZipFile
-
-# Настройка
+from io import StringIO  
 with open("config.yaml") as f:
     cfg = yaml.safe_load(f)
 
@@ -94,14 +93,13 @@ def cmd_exit():
 
 def cmd_test():
     results = []
-    # Тесты для cmd_pwd
     print("Testing cmd_pwd:")
     global pwd
-    pwd = '/'  # Установим начальный путь
-    output = sys.stdout  # Сохраним стандартный вывод
-    from io import StringIO  # Импортируем StringIO для захвата вывода
+    pwd = '/' 
+    output = sys.stdout  
+    
 
-    # Тест 1
+
     captured_output = StringIO()
     sys.stdout = captured_output
     cmd_pwd()
@@ -113,7 +111,7 @@ def cmd_test():
         print("Test 1 for cmd_pwd: error")
         results.append('pwd test 1 not passed\n')
 
-    # Тест 2
+
     pwd = '/dir1'
     captured_output = StringIO()
     sys.stdout = captured_output
@@ -128,15 +126,15 @@ def cmd_test():
     pwd = '/'
     print()
 
-    # Тесты для cmd_ls
+
     print("Testing cmd_ls:")
-    # Очистим архив перед тестами
+
     with ZipFile(vfs_path, 'w') as file:
-        pass  # Создаем пустой архив
+        pass  
 
     
     cmd_mkdir('dir1')
-    pwd = '/'  # Установим начальный путь
+    pwd = '/'  
     captured_output = StringIO()
     sys.stdout = captured_output
     cmd_ls()
@@ -150,7 +148,7 @@ def cmd_test():
 
     
     with ZipFile(vfs_path, 'w') as file:
-        pass  # Создаем пустой архив
+        pass 
     cmd_mkdir('dir1')
     cmd_cd("dir1") 
     cmd_touch('file2')
@@ -172,12 +170,13 @@ def cmd_test():
     with ZipFile(vfs_path, 'w') as file:
         pass 
     
+    
 # Тесты для cmd_rm
     print("Testing cmd_rm:")
-    #coздадим файл
+
+
     cmd_touch('rem')
     cmd_ls()
-    # Удаляем файл
     cmd_rm('rem')
     print("pass1")
     
@@ -195,7 +194,6 @@ def cmd_test():
         results.append("rm test 1 passed\n")
 
 
-    # Проверяем удаление несуществующего файла
     captured_output = StringIO()
     sys.stdout = captured_output
     result = cmd_rm('non_existent_file')
@@ -212,13 +210,13 @@ def cmd_test():
         pass 
     
 
-    # Тесты для cmd_cd
+    # test cmd_cd
     print("Testing cmd_cd:")
     
-    pwd = '/'  # Установ ленный путь
+    pwd = '/'  
     captured_output = StringIO()
     sys.stdout = captured_output
-    cmd_cd('dir4')  # Ожидаем: cd: no such file or directory
+    cmd_cd('dir4')  
     sys.stdout = output
     if captured_output.getvalue().strip() == "cd: no such file or directory: dir4":
         print("Test 1 for cmd_cd: success")
@@ -230,7 +228,7 @@ def cmd_test():
     #test 2 cd
     cmd_mkdir('dir1')
     cmd_ls()
-    cmd_cd('dir1')  # Ожидаем: ничего не выводится, просто меняем путь
+    cmd_cd('dir1') 
     cmd_pwd()
     if pwd == 'dir1/':
         print("Test 2 for cmd_cd: success")
@@ -239,7 +237,7 @@ def cmd_test():
         print("Test 2 for cmd_cd: error")
         results.append("cd test 2 not passed\n")
 
-    cmd_cd('..')  # Возвращаемся на уровень выше
+    cmd_cd('..') 
     if pwd == '/':
         print("Test 3 for cmd_cd: success")
         results.append("cd test 3 passed\n")
@@ -296,7 +294,6 @@ def cmd_test():
         results.append("mkdir test 1 not passed\n")
     
     print('cmd_mkdir: test 2')
-    cmd_ls()
     captured_output = StringIO()
     sys.stdout = captured_output
     cmd_mkdir("mkdir_test")
